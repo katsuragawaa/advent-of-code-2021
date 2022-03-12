@@ -39,7 +39,7 @@ exports.__esModule = true;
 var events_1 = require("events");
 var fs_1 = require("fs");
 var readline_1 = require("readline");
-function processLineByLine() {
+function partOne() {
     return __awaiter(this, void 0, void 0, function () {
         var rl, depths_1, counter_1, err_1;
         return __generator(this, function (_a) {
@@ -75,4 +75,48 @@ function processLineByLine() {
         });
     });
 }
-processLineByLine();
+function partTwo() {
+    return __awaiter(this, void 0, void 0, function () {
+        var rl, depths_2, slidingWindows_1, counter_2, err_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    rl = (0, readline_1.createInterface)({
+                        input: (0, fs_1.createReadStream)('input.txt'),
+                        crlfDelay: Infinity
+                    });
+                    depths_2 = [];
+                    slidingWindows_1 = [];
+                    counter_2 = 0;
+                    rl.on('line', function (line) {
+                        var currentWindow = [parseInt(line), depths_2.at(-1), depths_2.at(-2)];
+                        depths_2.push(parseInt(line));
+                        if (depths_2.length < 3)
+                            return;
+                        var previousWindow = slidingWindows_1.at(-1);
+                        slidingWindows_1.push(currentWindow);
+                        if (slidingWindows_1.length === 1)
+                            return;
+                        if (sum(currentWindow) > sum(previousWindow))
+                            counter_2++;
+                    });
+                    return [4 /*yield*/, (0, events_1.once)(rl, 'close')];
+                case 1:
+                    _a.sent();
+                    console.log(counter_2);
+                    return [3 /*break*/, 3];
+                case 2:
+                    err_2 = _a.sent();
+                    console.error(err_2);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+function sum(arr) {
+    return arr.reduce(function (acc, number) { return acc + number; }, 0);
+}
+partOne();
+partTwo();
