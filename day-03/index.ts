@@ -10,7 +10,7 @@ async function readFile() {
 
   const input: string[] = [];
 
-  rl.on('line', (line) => {
+  rl.on('line', line => {
     input.push(line);
   });
 
@@ -35,7 +35,7 @@ async function partOne() {
 
   let gammaBits: string = '';
   let epsilonBits: string = '';
-  Object.keys(zeroBitsOnIndex).forEach((index) => {
+  Object.keys(zeroBitsOnIndex).forEach(index => {
     if (zeroBitsOnIndex[index] > report.length / 2) {
       gammaBits += '0';
       epsilonBits += '1';
@@ -50,4 +50,39 @@ async function partOne() {
   console.log(gamma * epsilon);
 }
 
-partOne();
+async function partTwo() {
+  const reports = await readFile();
+  const oxygen = parseInt(oxygenRating(reports, 0), 2);
+  const co2 = parseInt(co2Rating(reports, 0), 2);
+  console.log(oxygen * co2);
+}
+
+function oxygenRating(reports: string[], index: number) {
+  if (reports.length === 1) return reports[0];
+
+  const zeroBitReports = reports.filter(report => report[index] == '0');
+  const oneBitReports = reports.filter(report => report[index] == '1');
+
+  const filteredReports =
+    zeroBitReports.length > oneBitReports.length
+      ? zeroBitReports
+      : oneBitReports;
+
+  return oxygenRating(filteredReports, index + 1);
+}
+
+function co2Rating(reports: string[], index: number) {
+  if (reports.length === 1) return reports[0];
+
+  const zeroBitReports = reports.filter(report => report[index] == '0');
+  const oneBitReports = reports.filter(report => report[index] == '1');
+
+  const filteredReports =
+    zeroBitReports.length <= oneBitReports.length
+      ? zeroBitReports
+      : oneBitReports;
+
+  return co2Rating(filteredReports, index + 1);
+}
+
+partTwo();

@@ -102,4 +102,40 @@ function partOne() {
         });
     });
 }
-partOne();
+function partTwo() {
+    return __awaiter(this, void 0, void 0, function () {
+        var reports, oxygen, co2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, readFile()];
+                case 1:
+                    reports = _a.sent();
+                    oxygen = parseInt(oxygenRating(reports, 0), 2);
+                    co2 = parseInt(co2Rating(reports, 0), 2);
+                    console.log(oxygen * co2);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function oxygenRating(reports, index) {
+    if (reports.length === 1)
+        return reports[0];
+    var zeroBitReports = reports.filter(function (report) { return report[index] == '0'; });
+    var oneBitReports = reports.filter(function (report) { return report[index] == '1'; });
+    var filteredReports = zeroBitReports.length > oneBitReports.length
+        ? zeroBitReports
+        : oneBitReports;
+    return oxygenRating(filteredReports, index + 1);
+}
+function co2Rating(reports, index) {
+    if (reports.length === 1)
+        return reports[0];
+    var zeroBitReports = reports.filter(function (report) { return report[index] == '0'; });
+    var oneBitReports = reports.filter(function (report) { return report[index] == '1'; });
+    var filteredReports = zeroBitReports.length <= oneBitReports.length
+        ? zeroBitReports
+        : oneBitReports;
+    return co2Rating(filteredReports, index + 1);
+}
+partTwo();
